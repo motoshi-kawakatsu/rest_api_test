@@ -1,0 +1,14 @@
+[Unit]
+Description = REST API TEST Application Daemon
+After = syslog.target
+
+[Service]
+ExecStart = /var/rest-api-test/rest-api-test-0.1.0.jar
+Restart = always
+Type = simple
+User = gxdev
+Group = gxdev
+SuccessExitStatus = 143
+
+[Install]
+WantedBy = multi-user.target
