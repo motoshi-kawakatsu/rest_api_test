@@ -69,8 +69,8 @@ public class HelloController {
         List<Person>	personList = new ArrayList<Person>();
         
         String	uri = System.getenv("DATABASE_URL");
-        String 	username = "postgres";
-        String	password = "sw209089";
+        String 	username = "lqgqyojyiqiwtq";
+        String	password = "32a47941db8e7f975be979350af601b859d78b820229cf1145a795d178695b0e";
         
         Connection	conn = DriverManager.getConnection(uri, username, password);
         Statement	stmt = conn.createStatement();
