@@ -1,7 +1,14 @@
 package hello.controller;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -50,4 +57,35 @@ public class HelloController {
     public List<Person> person() {
         return service.findAll();
     }
+    
+    /**
+     * Person Page Ver.2
+     *
+     * @return Person List
+     */
+    @RequestMapping(value = "/person2", method = RequestMethod.GET)
+    @ResponseBody
+    public List<Person> person2() throws SQLException {
+        List<Person>	personList = new ArrayList<Person>();
+        
+        String	uri = System.getenv("DATABASE_URL");
+        String 	username = "postgres";
+        String	password = "sw209089";
+        
+        Connection	conn = DriverManager.getConnection(uri, username, password);
+        Statement	stmt = conn.createStatement();
+        
+        ResultSet	rs = stmt.executeQuery("SELECT * FROM person");
+        
+        while(rs.next()) {
+        	Person	p = new Person();
+        	p.setId(rs.getInt("Id"));
+        	p.setName(rs.getString("name"));
+        	p.setAge(rs.getInt("age"));
+        	personList.add(p);
+        }
+        
+        return personList;
+    }
+    
 }
