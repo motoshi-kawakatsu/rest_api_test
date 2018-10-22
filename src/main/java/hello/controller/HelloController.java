@@ -1,5 +1,6 @@
 package hello.controller;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.sql.Connection;
@@ -68,11 +69,13 @@ public class HelloController {
     public List<Person> person2() throws SQLException {
         List<Person>	personList = new ArrayList<Person>();
         
-        String	uri = System.getenv("DATABASE_URL");
-        String 	username = "lqgqyojyiqiwtq";
-        String	password = "32a47941db8e7f975be979350af601b859d78b820229cf1145a795d178695b0e";
+        URI		dbUri = URI.create(System.getenv("DATABASE_URL"));
+
+        String	username = dbUri.getUserInfo().split(":")[0];
+        String	password = dbUri.getUserInfo().split(":")[1];
+        String	dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
         
-        Connection	conn = DriverManager.getConnection(uri, username, password);
+        Connection	conn = DriverManager.getConnection(dbUrl, username, password);
         Statement	stmt = conn.createStatement();
         
         ResultSet	rs = stmt.executeQuery("SELECT * FROM person");
