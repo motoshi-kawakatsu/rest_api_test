@@ -3,6 +3,7 @@ package hello.controller;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -74,9 +75,9 @@ public class HelloController {
         String	password;
         String	url;
 
-        String	databaseUrl = System.getenv("DATABASE_URL");
-        if(databaseUrl != null) {
-            URI		dbUri = URI.create(databaseUrl);
+        Map<String, String>	databaseUrl = System.getenv();
+        if(databaseUrl.containsKey("DATABASE_URL")) {
+            URI		dbUri = URI.create(databaseUrl.get("DATABASE_URL"));
 
             url = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
             username = dbUri.getUserInfo().split(":")[0];
