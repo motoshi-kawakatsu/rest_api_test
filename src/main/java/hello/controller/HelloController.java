@@ -3,13 +3,14 @@ package hello.controller;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -33,12 +34,15 @@ public class HelloController {
     /**
      * Return the character string as it is to the request destination
      *
-     * @return The character string is displayed as it is.
+     * @return Hello, <employeeNumber>
      */
     @RequestMapping(value = "/", method = RequestMethod.GET)
     @ResponseBody
     public String topPage() {
-        return "The character string is displayed as it is !";
+        SecurityContext	securityContext = SecurityContextHolder.getContext();
+        LoginPrincipal	loginPrincipal = (LoginPrincipal) securityContext.getAuthentication().getPrincipal();
+        
+        return "Hello, " + loginPrincipal.getEmployeeNumber() + "!";
     }
 
     /**
@@ -103,5 +107,4 @@ public class HelloController {
         
         return personList;
     }
-    
 }
