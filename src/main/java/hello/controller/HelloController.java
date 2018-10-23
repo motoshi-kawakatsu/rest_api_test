@@ -9,7 +9,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -26,6 +25,9 @@ public class HelloController {
 
 	@Autowired
 	PersonService service;
+    
+    @Autowired
+    AppProperties	prop;
 	
     /**
      * Return the character string as it is to the request destination
@@ -68,14 +70,25 @@ public class HelloController {
     @ResponseBody
     public List<Person> person2() throws SQLException {
         List<Person>	personList = new ArrayList<Person>();
-        
-        URI		dbUri = URI.create(System.getenv("DATABASE_URL"));
+        String	username;
+        String	password;
+        String	url;
 
-        String	username = dbUri.getUserInfo().split(":")[0];
-        String	password = dbUri.getUserInfo().split(":")[1];
-        String	dbUrl = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
-        
-        Connection	conn = DriverManager.getConnection(dbUrl, username, password);
+        String	databaseUrl = System.getenv("DATABASE_URL");
+        if(databaseUrl != null) {
+            URI		dbUri = URI.create(databaseUrl);
+
+            url = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
+            username = dbUri.getUserInfo().split(":")[0];
+            password = dbUri.getUserInfo().split(":")[1];
+        } else {
+        	
+        	url = prop.getUrl();
+        	username = prop.getUsername();
+        	password = prop.getPassword();
+        }
+
+        Connection	conn = DriverManager.getConnection(url, username, password);
         Statement	stmt = conn.createStatement();
         
         ResultSet	rs = stmt.executeQuery("SELECT * FROM person");
