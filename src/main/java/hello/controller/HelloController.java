@@ -75,15 +75,14 @@ public class HelloController {
         String	password;
         String	url;
 
-        Map<String, String>	databaseUrl = System.getenv();
-        if(databaseUrl.containsKey("DATABASE_URL")) {
-            URI		dbUri = URI.create(databaseUrl.get("DATABASE_URL"));
+        String	databaseUrl = System.getenv("DATABASE_URL");
+        if(databaseUrl != null) {
+            URI		dbUri = URI.create(databaseUrl);
 
             url = "jdbc:postgresql://" + dbUri.getHost() + dbUri.getPath();
             username = dbUri.getUserInfo().split(":")[0];
             password = dbUri.getUserInfo().split(":")[1];
         } else {
-        	
         	url = prop.getUrl();
         	username = prop.getUsername();
         	password = prop.getPassword();
