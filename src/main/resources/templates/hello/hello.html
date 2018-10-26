@@ -3,8 +3,16 @@
 	<head>
 		<meta charset="UTF-8"></meta>
 		<title>Hello</title>
-	</head>
+		
+		<!--  REACT実行用  -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/react/15.3.1/react-dom.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/6.10.3/babel.min.js"></script>
+		<!--  REACT実行ファイル -->
+		<script type="text/babel" th:src="@{/js/hello.js}"></script>
+	</head>		
 	<body>
 		<h1>Hello World!</h1>
+		<div id="content"></div>
 	</body>
 </html>
