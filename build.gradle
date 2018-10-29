@@ -33,7 +33,6 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-security')
     compile('org.springframework:spring-jdbc')
 	compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.5.0'
-	compile('com.fasterxml.jackson.core:jackson-databind')
     runtime('org.postgresql:postgresql')
     testCompile('junit:junit')
 }

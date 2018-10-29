@@ -13,6 +13,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import hello.app.resource.PersonResource;
 import hello.domain.DataSourceConfigProperties;
 import hello.domain.model.Person;
@@ -35,7 +39,43 @@ public class HelloController {
     @Autowired
     DataSourceConfigProperties	prop;
 	
-    /**
+	private static final int STATUS_OK = 0;
+	private static final int STATUS_NG = 1;
+
+	private class ResultInfo{
+		public String memberId;
+		public String memberName;
+		public int status;
+		public String error;
+	}
+	
+	@RequestMapping("/MyAccount")
+	public String MyAccount() {
+
+		return "MyAccount/MyAccount";
+	}
+	
+	@RequestMapping("/MyAccount/GetAccountInfo")
+	@ResponseBody
+	public String GetAccountInfo(String MemberId) {
+		ResultInfo ret = new  ResultInfo();
+		ret.memberId = "test";
+		ret.memberName = "Motoshi Kawakatsu";
+		ret.status = STATUS_OK;
+
+		String retVal = "";
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			retVal = mapper.writeValueAsString(ret);
+		} catch (JsonProcessingException e) {
+			e.printStackTrace();
+			ret.status = STATUS_NG;
+			ret.error = e.getMessage();
+		}
+		return retVal;
+	}
+
+	/**
      * Return the character string as it is to the request destination
      *
      * @return Hello, <employeeNumber>
@@ -75,7 +115,7 @@ public class HelloController {
     @RequestMapping(value = "/person/{id}", method = RequestMethod.GET)
     @ResponseBody
     public PersonResource person(@PathVariable int id) {
-        Person	one = service.find(id);
+         Person	one = service.find(id);
         
         PersonResource	resource = new PersonResource();
         resource.setId(one.getId());
